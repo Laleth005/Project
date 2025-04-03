@@ -50,14 +50,12 @@ pipeline {
             steps {
                 script {
                     echo "📤 Pushing Docker Image to Docker Hub..."
-                    withCredentials([string(credentialsId: 'docker-hub-credential', variable: 'DOCKER_HUB_TOKEN')]) {
-                        sh '''
-                            echo "🔐 Logging in to Docker Hub..."
-                            echo "$DOCKER_HUB_TOKEN" | docker login -u "laleth" --password-stdin
-                            echo "🚀 Pushing Docker Image: ${DOCKER_IMAGE}..."
-                            docker push ${DOCKER_IMAGE}
-                            echo "✅ Docker Image Push Successful!"
-                        '''
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_TOKEN')]) {
+    sh '''
+        echo 🔐 Logging in to Docker Hub...
+        echo $DOCKER_HUB_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+        docker push laleth2614/laleth2:latest
+    '''
                     }
                 }
             }
